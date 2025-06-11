@@ -16,6 +16,13 @@ processors:
 exporters:
   debug:
     verbosity: detailed
+  kafka:
+    brokers:
+      - localhost:9092
+    topic: bifrost
+    encoding: json
+    # compression: gzip
+    # batch_size: 1024
 
 service:
   pipelines:

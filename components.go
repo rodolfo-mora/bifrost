@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
+	"log"
 
+	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/consumer"
 	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/exporter/debugexporter"
-	"go.opentelemetry.io/collector/exporter/kafkaexporter"
 	"go.opentelemetry.io/collector/otelcol"
 	"go.opentelemetry.io/collector/processor"
 	"go.opentelemetry.io/collector/processor/batchprocessor"
@@ -36,9 +37,7 @@ var components = otelcol.Factories{
 func createMetricProcessorConfig() component.Config {
 	return &struct {
 		RedisAddr string `mapstructure:"redis_addr"`
-	}{
-		RedisAddr: "redis:6379",
-	}
+	}{}
 }
 
 func createMetricProcessor(
@@ -47,5 +46,9 @@ func createMetricProcessor(
 	cfg component.Config,
 	nextConsumer consumer.Metrics,
 ) (processor.Metrics, error) {
-	return NewMetricProcessor(nextConsumer, set.Logger, "localhost:6379"), nil
+	config := cfg.(*struct {
+		RedisAddr string `mapstructure:"redis_addr"`
+	})
+	log.Println("config", config)
+	return NewMetricProcessor(nextConsumer, set.Logger, config.RedisAddr), nil
 }

@@ -17,7 +17,6 @@ type MetricProcessor struct {
 	nextConsumer consumer.Metrics
 	logger       *zap.Logger
 	redisClient  *redis.Client
-	redisAddr    string
 }
 
 // NewMetricProcessor creates a new MetricProcessor
